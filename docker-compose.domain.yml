@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  django-helpdesk:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:-web}
+      - traefik.dh.frontend.rule=Host:${APP_DOMAINS:-djangeo-helpdesk.127.0.0.1.xip.io}
+      - traefik.dh.frontend.entryPoints=http,https
+      - traefik.dh.frontend.headers.SSLRedirect=true
+      - traefik.dh=80
+    networks:
+      - helpdesk
+      - web
+
+networks:
+  helpdesk:
+  web:
+    name: ${TRAEFIK_NETWORK:-web}

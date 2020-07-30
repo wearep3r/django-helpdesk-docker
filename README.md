@@ -21,28 +21,43 @@ INFO: `make help` displays available commands
 - Helpdesk: [http://localhost:8000](http://localhost:8000)
 - Admin Dashboard: [http://localhost:8000/admin](http://localhost:8000/admin)
 
-## Build
+## Development
+
+### Build
 
 `make build`
 
-## Develop
+### Develop
 
 `make dev`
 
-## Create superuser
+### Start (Foreground)
 
 ```bash
-make dev
-python manage.py createsuperuser
+make build
+make run
 ```
 
 ## Start (Background)
 
-`make up`
+```bash
+make build
+make up
+```
+
+## Create superuser
+
+To create a superuser, the stack needs to be running, so make sure to run `make run` or `make up` before.
+
+```bash
+make superuser
+```
 
 ## Stop
 
-`make stop`
+```bash
+make stop
+```
 
 ## Official Docker image
 

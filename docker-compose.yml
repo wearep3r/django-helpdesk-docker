@@ -1,17 +1,20 @@
-version: '3'
+version: '3.7'
     
 services:
   db:
     image: postgres
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+    networks:
+      - helpdesk
+
   django-helpdesk:
-    build: .
-    image: django-helpdesk
-    command: python3 manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
+    image: registry.gitlab.com/peter.saarland/django-helpdesk:latest
     environment:
       - DEBUG=True
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
@@ -30,7 +33,13 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - helpdesk
+
 
 volumes:
   helpdesk-static:
   helpdesk-media:  
+
+networks:
+  helpdesk:

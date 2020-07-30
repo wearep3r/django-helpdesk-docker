@@ -28,6 +28,6 @@ EXPOSE 8000
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-# CMD [ "gunicorn", "--chdir", "/app", "--bind", ":8080", "helpdesk.wsgi:application" ]
+CMD [ "gunicorn", "--chdir", "/app", "--bind", ":8080", "helpdesk.wsgi:application" ]
 
 LABEL maintainer="Fabian Peter <fabian@peter.saarland>"

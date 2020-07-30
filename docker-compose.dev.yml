@@ -1,0 +1,8 @@
+version: '3.7' 
+
+services:
+  django-helpdesk:
+      build: .
+      command: python3 manage.py runserver 0.0.0.0:8000
+      ports:
+        - 8000:8000

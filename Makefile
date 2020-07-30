@@ -32,15 +32,20 @@ build: ## Build Helpdesk Docker image
 #dev: .SHELLFLAGS = ${DOCKER_SHELLFLAGS}
 #dev: SHELL := docker
 dev: ## Run Helpdesk Docker image and enter bash
-> @docker-compose run django-helpdesk bash
+#> @docker-compose run django-helpdesk bash
+> @docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 .PHONY: run
-run: ## Run Helpdesk Stack (Foreground)
+run:  ## Run Helpdesk Stack (Foreground)
 > @docker-compose up --remove-orphans 
 
 .PHONY: up
-up: ## Run Helpdesk Stack (Background)
+up:  ## Run Helpdesk Stack (Background)
 > @docker-compose up --remove-orphans -d
+
+.PHONY: superuser
+superuser: ## Create Superuser
+> @docker-compose run django-helpdesk python manage.py createsuperuser
 
 .PHONY: stop
 stop: ## Stop Helpdesk Stack
