@@ -20,34 +20,34 @@ DOCKER_SHELLFLAGS ?= run --rm -it --name django-helpdesk -e DEVELOPMENT=1 -v ${P
 export DOCKER_BUILDKIT=1
 
 .PHONY: help
-help:
+help: ## Display help
 >	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 # Development
-.PHONY: build
-build:
+.PHONY: build 
+build: ## Build Helpdesk Docker image
 > @docker build --pull -t django-helpdesk .
 
 .PHONY: dev
 #dev: .SHELLFLAGS = ${DOCKER_SHELLFLAGS}
 #dev: SHELL := docker
-dev:
+dev: ## Run Helpdesk Docker image and enter bash
 > @docker-compose run django-helpdesk bash
 
 .PHONY: run
-run:
+run: ## Run Helpdesk Stack (Foreground)
 > @docker-compose up --remove-orphans 
 
 .PHONY: up
-up:
+up: ## Run Helpdesk Stack (Background)
 > @docker-compose up --remove-orphans -d
 
 .PHONY: stop
-stop:
+stop: ## Stop Helpdesk Stack
 > @docker-compose stop
 
 .PHONY: clean
-clean:
+clean: ## Remove Helpdesk Stack (volumes excluded, they stay untouched)
 > @docker-compose down --remove-orphans --rmi local
 > @rm -rf django_helpdesk manage.py
 
