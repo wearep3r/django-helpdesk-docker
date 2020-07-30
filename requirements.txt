@@ -1,0 +1,13 @@
+django-helpdesk>=0.2.22
+gunicorn
+django-environ
+psycopg2-binary
+Django>=1.11,<3
+django-bootstrap-form>=3.3,<4
+email-reply-parser
+django-markdown-deux
+beautifulsoup4
+lxml
+simplejson
+pytz
+six
