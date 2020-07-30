@@ -43,3 +43,7 @@ python manage.py createsuperuser
 ## Stop
 
 `make stop`
+
+## Official Docker image
+
+A pre-built Docker image of django-helpdesk can be pulled from [registry.gitlab.com/peter.saarland/django-helpdesk:latest](registry.gitlab.com/peter.saarland/django-helpdesk:latest).
