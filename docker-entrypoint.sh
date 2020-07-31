@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 # Wait for DB to come up
 echo "Waiting for postgres..."
@@ -20,14 +20,15 @@ if [ ! -f "django_helpdesk/_settings.py" ]; then
   # Run Migrations
   python manage.py migrate helpdesk
 
-  # Collect static files
-  python manage.py collectstatic
-
   #chown www-data:www-data attachments/
   #chmod 700 attachments
 else
   echo "django_helpdesk already exists"
 fi
+
+# Collect static files
+echo "Collecting static files"
+python manage.py collectstatic --noinput
 
 # Run Migrations
 python manage.py makemigrations

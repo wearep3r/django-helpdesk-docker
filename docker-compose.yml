@@ -11,10 +11,13 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     networks:
       - helpdesk
+    volumes:
+      - helpdesk-db:/var/lib/postgresql/data
 
   django-helpdesk:
     restart: unless-stopped
     image: registry.gitlab.com/peter.saarland/django-helpdesk:latest
+    command: "gunicorn --bind :8000 django_helpdesk.wsgi:application"
     environment:
       - DEBUG=True
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
@@ -29,17 +32,34 @@ services:
       #- .:/app
       - helpdesk-static:/app/static
       - helpdesk-media:/app/media
-    ports:
-      - "8000:8000"
     depends_on:
       - db
     networks:
       - helpdesk
 
+  nginx:
+    image: django-helpdesk-nginx
+    restart: always
+    volumes:
+      - helpdesk-static:/static
+      - helpdesk-media:/media
+    ports:
+      - "8000:80"
+    # labels:
+    #     - "traefik.enable=true"
+    #     - "traefik.backend=nginx"
+    #     - "traefik.frontend.rule=Host:xyz.co;PathPrefix:/static"
+    #     - "traefik.port=80"
+    networks:
+      - helpdesk
+
+
+
 
 volumes:
   helpdesk-static:
-  helpdesk-media:  
+  helpdesk-media:
+  helpdesk-db:
 
 networks:
   helpdesk:

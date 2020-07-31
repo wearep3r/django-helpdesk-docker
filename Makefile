@@ -27,21 +27,22 @@ help: ## Display help
 .PHONY: build 
 build: ## Build Helpdesk Docker image
 > @docker build --pull -t django-helpdesk .
+> @docker build --pull -t django-helpdesk-nginx docker/nginx
 
 .PHONY: dev
 #dev: .SHELLFLAGS = ${DOCKER_SHELLFLAGS}
 #dev: SHELL := docker
 dev: ## Run Helpdesk Docker image and enter bash
 #> @docker-compose run django-helpdesk bash
-> @docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+> @docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --remove-orphans 
 
 .PHONY: run
 run:  ## Run Helpdesk Stack (Foreground)
-> @docker-compose up --remove-orphans 
+> @docker-compose -f docker-compose.yml  up --remove-orphans 
 
 .PHONY: up
 up:  ## Run Helpdesk Stack (Background)
-> @docker-compose up --remove-orphans -d
+> @docker-compose -f docker-compose.yml up --remove-orphans -d
 
 .PHONY: superuser
 superuser: ## Create Superuser
@@ -55,4 +56,5 @@ stop: ## Stop Helpdesk Stack
 clean: ## Remove Helpdesk Stack (volumes excluded, they stay untouched)
 > @docker-compose down --remove-orphans --rmi local
 > @rm -rf django_helpdesk manage.py
+> @docker volume rm rietmann-django-helpdesk_helpdesk-static rietmann-django-helpdesk_helpdesk-media
 
