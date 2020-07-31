@@ -29,7 +29,6 @@ services:
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME:-admin}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD:-admin}
     volumes:
-      #- .:/app
       - helpdesk-static:/app/static
       - helpdesk-media:/app/media
     depends_on:
@@ -43,18 +42,16 @@ services:
     volumes:
       - helpdesk-static:/static
       - helpdesk-media:/media
-    ports:
-      - "8000:80"
-    # labels:
-    #     - "traefik.enable=true"
-    #     - "traefik.backend=nginx"
-    #     - "traefik.frontend.rule=Host:xyz.co;PathPrefix:/static"
-    #     - "traefik.port=80"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:-web}
+      - traefik.dh.frontend.rule=Host:${APP_DOMAINS:-django-helpdesk.127.0.0.1.xip.io}
+      - traefik.dh.frontend.entryPoints=http,https
+      - traefik.dh.frontend.headers.SSLRedirect=true
+      - traefik.dh.port=80
     networks:
       - helpdesk
-
-
-
+      - web
 
 volumes:
   helpdesk-static:
@@ -63,3 +60,5 @@ volumes:
 
 networks:
   helpdesk:
+  web:
+    name: ${TRAEFIK_NETWORK:-web}

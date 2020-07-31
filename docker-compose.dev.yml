@@ -5,3 +5,9 @@ services:
       build: .
       image: django-helpdesk
       command: python3 manage.py runserver 0.0.0.0:8000
+
+  nginx:
+    build: docker/nginx
+    image: django-helpdesk-nginx
+    ports:
+      - "8000:80"
