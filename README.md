@@ -10,7 +10,7 @@
 ## Get Started
 
 ```bash
-git clone https://gitlab.com/peter.saarland/django-helpdesk/
+git clone https://gitlab.com/p3r.one/django-helpdesk/
 make run
 ```
 
@@ -61,4 +61,4 @@ make stop
 
 ## Official Docker image
 
-A pre-built Docker image of django-helpdesk can be pulled from [registry.gitlab.com/peter.saarland/django-helpdesk:latest](registry.gitlab.com/peter.saarland/django-helpdesk:latest).
+A pre-built Docker image of django-helpdesk can be pulled from [registry.gitlab.com/p3r.one/django-helpdesk:latest](registry.gitlab.com/p3r.one/django-helpdesk:latest).
