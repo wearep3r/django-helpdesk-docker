@@ -26,16 +26,18 @@ else
   echo "django_helpdesk already exists"
 fi
 
-# Collect static files
-echo "Collecting static files"
-python manage.py collectstatic --noinput
+if [ "$SKIP_MIGRATIONS" != "1" ];
+then
+  # Collect static files
+  echo "Collecting static files"
+  python manage.py collectstatic --noinput
 
-# Run Migrations
-python manage.py makemigrations
-python manage.py migrate
+  # Run Migrations
+  python manage.py makemigrations
+  python manage.py migrate
 
-# if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ] ; then
-#     (cd /app; python manage.py createsuperuser --username $DJANGO_SUPERUSER_USERNAME --no-input)
-# fi
-
+  # if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ] ; then
+  #     (cd /app; python manage.py createsuperuser --username $DJANGO_SUPERUSER_USERNAME --no-input)
+  # fi
+fi
 exec "$@"
