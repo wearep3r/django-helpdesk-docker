@@ -6,11 +6,18 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 USER root
 
-RUN apt-get update && apt-get install -y  --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
+    cron \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /app
+
+COPY cronjob /etc/cron.d/django-helpdesk
+
+RUN chmod 0644 /etc/cron.d/django-helpdesk \
+    && crontab /etc/cron.d/django-helpdesk \
+    && touch /var/log/cron.log
 
 WORKDIR /app
 
