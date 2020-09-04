@@ -6,24 +6,27 @@ echo "Waiting for postgres..."
 while !</dev/tcp/db/5432; do sleep 1; done;
 echo "Postgres started"
 
-if [ ! -f "django_helpdesk/_settings.py" ]; then
-  echo "Creating django_helpdesk"
-  django-admin startproject django_helpdesk /app
+if [ "$SKIP_MIGRATIONS" != "1" ];
+then
+  if [ ! -f "django_helpdesk/_settings.py" ]; then
+    echo "Creating django_helpdesk"
+    django-admin startproject django_helpdesk /app
 
-  # Run Migrations
-  python manage.py migrate
+    # Run Migrations
+    python manage.py migrate
 
-  mv /app/django_helpdesk/settings.py /app/django_helpdesk/_settings.py
-  cp /app/settings.py /app/django_helpdesk/settings.py
-  cp /app/urls.py /app/django_helpdesk/urls.py
+    mv /app/django_helpdesk/settings.py /app/django_helpdesk/_settings.py
+    cp /app/settings.py /app/django_helpdesk/settings.py
+    cp /app/urls.py /app/django_helpdesk/urls.py
 
-  # Run Migrations
-  python manage.py migrate helpdesk
+    # Run Migrations
+    python manage.py migrate helpdesk
 
-  #chown www-data:www-data attachments/
-  #chmod 700 attachments
-else
-  echo "django_helpdesk already exists"
+    #chown www-data:www-data attachments/
+    #chmod 700 attachments
+  else
+    echo "django_helpdesk already exists"
+  fi
 fi
 
 if [ "$SKIP_MIGRATIONS" != "1" ];
