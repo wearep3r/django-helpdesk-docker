@@ -17,7 +17,7 @@ DATABASES = {'default': env.db('DATABASE_URL')}
 
 public_root = root.path('public/')
 MEDIA_ROOT = env.str('MEDIA_ROOT', default=root.path('media/'))
-MEDIA_URL = env.str('MEDIA_URL', default='media/')
+#MEDIA_URL = env.str('MEDIA_URL', default='media/')
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
