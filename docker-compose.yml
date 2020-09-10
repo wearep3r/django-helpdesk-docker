@@ -43,7 +43,7 @@ services:
 
   cron:
     image: registry.gitlab.com/p3r.one/django-helpdesk:latest
-    command: "cron -f"
+    command: "/app/cron.sh"
     environment:
       - DEBUG=True
       - POSTGRES_DB=${POSTGRES_DB:-postgres}
