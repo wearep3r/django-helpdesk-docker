@@ -40,4 +40,9 @@ then
   #     (cd /app; python manage.py createsuperuser --username $DJANGO_SUPERUSER_USERNAME --no-input)
   # fi
 fi
+
+# Correct media permissions
+echo "Correcting media permissions"
+chmod 0777 /app/media
+
 exec "$@"
