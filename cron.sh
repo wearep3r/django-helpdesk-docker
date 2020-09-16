@@ -7,5 +7,8 @@ do
   # files are served by nginx in separate container
   # user nginx has id 101
   chown 101:101 /app/media -R
+
+  # Setting escalations
+  /app/manage.py create_escalation_exclusions --days saturday,sunday
   sleep 60; 
 done
