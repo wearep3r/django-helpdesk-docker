@@ -1,4 +1,4 @@
-django-helpdesk>=0.2.22
+#django-helpdesk>=0.2.22
 gunicorn
 django-environ
 psycopg2-binary

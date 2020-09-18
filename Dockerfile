@@ -8,18 +8,19 @@ USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
+    git \
     cron \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /app
 
-COPY cronjob /etc/cron.d/django-helpdesk
+#COPY cronjob /etc/cron.d/django-helpdesk
 
-RUN chmod 0644 /etc/cron.d/django-helpdesk \
-    && crontab /etc/cron.d/django-helpdesk \
-    && touch /var/log/cron.log
+RUN touch /var/log/cron.log
 
 WORKDIR /app
+
+#RUN git clone -b 0.2.x https://github.com/django-helpdesk/django-helpdesk.git helpdesk
 
 COPY requirements.txt requirements.txt
 
