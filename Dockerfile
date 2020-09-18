@@ -1,5 +1,5 @@
 ARG DOCKER_BASE_IMAGE
-FROM ${DOCKER_BASE_IMAGE:-python:3-slim}
+FROM ${DOCKER_BASE_IMAGE:-python:2-slim}
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3-dev \
+    python2-dev \
     git \
     cron \
     && apt-get clean \

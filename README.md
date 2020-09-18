@@ -10,8 +10,9 @@
 ## Get Started
 
 ```bash
-git clone https://gitlab.com/p3r.one/django-helpdesk/
-make run
+git clone --recursive https://gitlab.com/p3r.one/django-helpdesk/
+make build
+make dev
 ```
 
 INFO: `make help` displays available commands
@@ -22,6 +23,12 @@ INFO: `make help` displays available commands
 - Admin Dashboard: [http://localhost:8000/admin](http://localhost:8000/admin)
 
 ## Development
+
+Make changes as required to the code or the `helpdesk` module located in `./helpdesk/helpdesk`. The helpdesk module can be updated from upstream like this:
+
+```bash
+git submodule update
+```
 
 ### Build
 

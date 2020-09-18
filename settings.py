@@ -13,7 +13,7 @@ env = environ.Env()
 
 SITE_ROOT = root()
 DEBUG = env.bool('DEBUG', default=False)
-TEMPLATE_DEBUG = DEBUG
+#TEMPLATE_DEBUG = DEBUG
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
