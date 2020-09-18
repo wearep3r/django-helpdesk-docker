@@ -1,0 +1,9 @@
+Django>=1.11,<3
+django-bootstrap-form>=3.3,<4
+email-reply-parser
+django-markdown-deux
+beautifulsoup4
+lxml
+simplejson
+pytz
+six

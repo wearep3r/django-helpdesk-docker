@@ -1,0 +1,24 @@
+language: python
+dist: bionic # use LTS 18.04
+
+python:
+    - "2.7"
+    - "3.6"
+    - "3.7"
+
+env:
+    - DJANGO=1.11.23
+
+install:
+    - pip install -q Django==$DJANGO
+    - pip install -q -r requirements.txt
+    - pip install -q -r requirements-testing.txt
+
+before_script:
+    - "pycodestyle --exclude=migrations --ignore=E501,W503,W504 helpdesk"
+
+script:
+    - coverage run --source='.' quicktest.py helpdesk
+
+after_success:
+    - codecov
