@@ -86,7 +86,7 @@ services:
       - helpdesk-logs:/logs
     networks:
       - helpdesk
-    command: ash -c "tail -f /logs/*"
+    command: ash -c "[ -n "$(find /logs -name '*' | head -1)" ] && tail -f /logs/*"
     deploy:
       replicas: 1
       mode: replicated
