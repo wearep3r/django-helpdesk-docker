@@ -32,6 +32,9 @@ RUN chmod +x /docker-entrypoint.sh
 
 COPY . .
 
+RUN git submodule init \
+    && git submodule update
+
 EXPOSE 8000
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
