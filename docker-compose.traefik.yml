@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:v1.7
+    container_name: traefik
+    restart: unless-stopped
+    command: >
+      --docker
+      --docker.watch
+      --docker.exposedbydefault=false
+      --entrypoints='Name:http Address::80 Compress:true'
+      --entrypoints='Name:https Address::443 TLS Compress:true'
+      --acme
+      --acme.email=${LETSENCRYPT_EMAIL:-le@example.com}
+      --acme.storage="/etc/traefik/acme.json"
+      --acme.entryPoint=https
+      --acme.httpChallenge.entryPoint=http
+      --acme.onhostrule=true
+      --acme.acmelogging=true
+      --logLevel=INFO
+      --accessLog
+      --api
+    networks:
+      - helpdesk
+      - web
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik:/etc/traefik
+    labels:
+      - traefik.frontend.rule=Host:${TRAEFIK_DOMAIN:-traefik.127.0.0.1.xip.io}
+      - traefik.enable=true
+      - traefik.port=8080
+      - traefik.docker.network=web
+      - traefik.frontend.entryPoints=http,https
+      - traefik.frontend.headers.SSLRedirect=true
+
+networks:
+  helpdesk:
+  web:
+
+volumes:
+    traefik:   

@@ -1,0 +1,30 @@
+include:
+  - remote: "https://gitlab.com/peter.saarland/shipmate/-/raw/master/shipmate.gitlab-ci.yml"
+
+build nginx:
+  stage: build
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  variables:
+    DOCKER_BUILDKIT: 1 
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG/nginx:$CI_COMMIT_SHA
+  script:
+    - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY --username=gitlab-ci-token --password-stdin
+    - docker build --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -t $IMAGE_TAG -f docker/nginx/Dockerfile docker/nginx
+    - docker push $IMAGE_TAG
+
+ship nginx:
+  stage: ship
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  variables:
+    DOCKER_BUILDKIT: 1 
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/nginx:latest
+  only:
+    - master
+  script:
+    - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY --username=gitlab-ci-token --password-stdin
+    - docker build --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -t $IMAGE_TAG -f docker/nginx/Dockerfile docker/nginx
+    - docker push $IMAGE_TAG

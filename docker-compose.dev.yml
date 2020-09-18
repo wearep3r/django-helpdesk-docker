@@ -1,0 +1,15 @@
+version: '3.7' 
+
+services:
+  django-helpdesk:
+      build: .
+      image: django-helpdesk
+
+  cron:
+    image: django-helpdesk
+
+  nginx:
+    build: docker/nginx
+    image: django-helpdesk-nginx
+    ports:
+      - "8000:80"

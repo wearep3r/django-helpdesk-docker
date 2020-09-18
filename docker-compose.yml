@@ -1,0 +1,125 @@
+version: '3.7'
+    
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+    networks:
+      - helpdesk
+    volumes:
+      - helpdesk-db:/var/lib/postgresql/data
+
+  django-helpdesk:
+    image: registry.gitlab.com/p3r.one/django-helpdesk:latest
+    command: "gunicorn --bind :8000 django_helpdesk.wsgi:application"
+    environment:
+      - DEBUG=True
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      - SECRET_KEY=${SECRET_KEY:-supersecretnuclearweaponskey42!}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME:-admin}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD:-admin}
+      - LOG_DIRECTORY=/var/log/helpdesk
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+    volumes:
+      - helpdesk-static:/app/static
+      - helpdesk-media:/app/media
+      - helpdesk-logs:${LOG_DIRECTORY:-/var/log/helpdesk}
+    depends_on:
+      - db
+    networks:
+      - helpdesk
+
+  cron:
+    image: registry.gitlab.com/p3r.one/django-helpdesk:latest
+    command: "/app/cron.sh"
+    environment:
+      - DEBUG=True
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      - SECRET_KEY=${SECRET_KEY:-supersecretnuclearweaponskey42!}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME:-admin}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD:-admin}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - SKIP_MIGRATIONS=1
+    networks:
+      - helpdesk
+    volumes:
+      - helpdesk-logs:${LOG_DIRECTORY:-/var/log/helpdesk}
+      - helpdesk-static:/app/static
+      - helpdesk-media:/app/media
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      placement:
+        preferences:
+          - spread: node.id
+      update_config:
+        delay: 60s
+        monitor: 30s
+        order: start-first
+        failure_action: rollback
+      rollback_config:
+        delay: 60s
+        monitor: 30s
+        order: start-first
+        failure_action: pause
+  
+  logs:
+    image: alpine:latest
+    volumes:
+      - helpdesk-logs:/logs
+    networks:
+      - helpdesk
+    command: ash -c "tail -f /logs/*"
+    deploy:
+      replicas: 1
+      mode: replicated
+      restart_policy:
+        condition: on-failure
+
+  nginx:
+    image: django-helpdesk-nginx
+    restart: always
+    volumes:
+      - helpdesk-static:/static
+      - helpdesk-media:/media
+    labels:
+      - traefik.enable=true
+      - traefik.tags=proxy
+      - traefik.docker.network=${TRAEFIK_NETWORK:-proxy}
+      - traefik.dh.frontend.rule=Host:${APP_DOMAINS:-django-helpdesk.127.0.0.1.xip.io}
+      - traefik.dh.frontend.entryPoints=http,https
+      - traefik.dh.frontend.headers.SSLRedirect=true
+      - traefik.dh.port=80
+    networks:
+      - helpdesk
+      - proxy
+
+volumes:
+  helpdesk-static:
+  helpdesk-media:
+  helpdesk-db:
+  helpdesk-logs:
+
+networks:
+  helpdesk:
+  proxy:
+    driver: overlay
+    external: true
+    name: ${TRAEFIK_NETWORK:-proxy}
