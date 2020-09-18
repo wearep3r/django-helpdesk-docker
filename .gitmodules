@@ -1,4 +1,0 @@
-[submodule "helpdesk"]
-	path = helpdesk
-	url = https://github.com/django-helpdesk/django-helpdesk.git
-	branch = 0.2.x
