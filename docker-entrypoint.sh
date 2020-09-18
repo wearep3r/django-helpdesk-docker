@@ -6,6 +6,14 @@ echo "Waiting for postgres..."
 while !</dev/tcp/db/5432; do sleep 1; done;
 echo "Postgres started"
 
+if [ "$SKIP_MIGRATIONS" == "1" ];
+then
+  echo "Seems like I'm a CRON instance."
+  echo "Waiting for main django-helpdesk application to become ready..."
+  while !</dev/tcp/django-helpdesk/8000; do sleep 5; done;
+  echo "django-helpdesk started"
+fi
+
 if [ ! -f "django_helpdesk/_settings.py" ]; then
   echo "Creating django_helpdesk"
   django-admin startproject django_helpdesk /app
