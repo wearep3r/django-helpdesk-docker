@@ -1,5 +1,12 @@
 # Django Helpdesk
 
+[!["Maintained"](https://img.shields.io/maintenance/yes/2020?color=green)](https://github.com/wearep3r/django-helpdesk-docker)
+[!["Version"](https://img.shields.io/github/v/tag/wearep3r/django-helpdesk-docker?label=version)](https://github.com/wearep3r/django-helpdesk-docker)
+[!["License"](https://img.shields.io/github/license/wearep3r/django-helpdesk-docker)](https://github.com/wearep3r/django-helpdesk-docker)
+[!["p3r. Slack"](https://img.shields.io/badge/slack-@wearep3r/general-purple.svg?logo=slack&label=Slack)](https://join.slack.com/t/wearep3r/shared_invite/zt-d9ao21f9-pb70o46~82P~gxDTNy_JWw)
+[!["GitLab Stars"](https://img.shields.io/badge/dynamic/json?color=orange&label=GitLab%20stars&query=%24.star_count&url=https%3A%2F%2Fgitlab.com%2Fapi%2Fv4%2Fprojects%2F20243817)](https://gitlab.com/p3r.one/django-helpdesk)
+[!["GitHub Stars"](https://img.shields.io/github/stars/wearep3r/django-helpdesk-docker?logo=github)](https://github.com/wearep3r/django-helpdesk-docker)
+
 ## Prerequisites
 
 - git
