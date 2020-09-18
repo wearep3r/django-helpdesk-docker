@@ -45,4 +45,9 @@ fi
 echo "Correcting media permissions"
 chmod 0777 /app/media
 
+# Copy helpdesk module
+#echo "Copying helpdesk"
+#export PYTHONPATH="$PWD/django_helpdesk/helpdesk:$PYTHONPATH"
+#cp -r helpdesk/helpdesk django_helpdesk/helpdesk
+
 exec "$@"

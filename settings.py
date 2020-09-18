@@ -2,6 +2,10 @@
 
 import environ
 import os
+import sys
+
+# Add custom helpdesk url
+sys.path.insert(0, "/app/helpdesk")
 
 root = environ.Path(__file__) - 3  # get root of the project
 env = environ.Env()

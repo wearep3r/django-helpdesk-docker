@@ -4,7 +4,9 @@ services:
   django-helpdesk:
       build: .
       image: django-helpdesk
-      command: python3 manage.py runserver 0.0.0.0:8000
+
+  cron:
+    image: django-helpdesk
 
   nginx:
     build: docker/nginx
