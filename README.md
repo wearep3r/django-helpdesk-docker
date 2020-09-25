@@ -76,3 +76,4 @@ make stop
 ## Official Docker image
 
 A pre-built Docker image of django-helpdesk can be pulled from [registry.gitlab.com/p3r.one/django-helpdesk:latest](registry.gitlab.com/p3r.one/django-helpdesk:latest).
+
