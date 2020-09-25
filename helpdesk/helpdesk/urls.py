@@ -177,6 +177,10 @@ urlpatterns += [
         login_required(feeds.UnassignedTickets()),
         name='rss_unassigned'),
 
+    url(r'^rss/OtooV9ox1ahCaiquu2theeng/$',
+        feeds.RecentFollowUps(),
+        name='rss_activity'),
+
     url(r'^rss/recent_activity/$',
         login_required(feeds.RecentFollowUps()),
         name='rss_activity'),
